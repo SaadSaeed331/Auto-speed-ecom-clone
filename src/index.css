@@ -1,0 +1,29 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+
+.slider-child:hover .slider-child-image {
+    border: 1px solid red;
+    transition: all linear 0.3s;
+}
+
+.slider-child:hover .slider-child-text{
+    color: red;
+    transition: all linear 0.3s;
+}
+.catagory-slider-quickview {
+    display: none;
+    
+}
+.quickview{
+    display: none;
+}
+
+.slider-child-2:hover  .quickview{
+    display: block;
+}
+
+.slider-child-2:hover .catagory-slider-quickview {
+    display: block;
+}

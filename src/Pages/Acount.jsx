@@ -1,6 +1,7 @@
 import React from 'react'
 import Navbar from '../Components/Navbar'
 import { Link } from 'react-router-dom'
+import Orderhistory from '../Components/Orderhistory'
 
 const Acount = () => {
   return (
@@ -27,10 +28,12 @@ const Acount = () => {
     </div>
     </div>
     
+    <div className='p-5'>
 
-    <h1 className='text-2xl font-bold p-5 text-red-500'>Order History::</h1>
+    <h1 className='text-2xl font-bold text-red-500'>Order History::</h1>
+    <Orderhistory/>
 
-    
+    </div>
     </>
   )
 }

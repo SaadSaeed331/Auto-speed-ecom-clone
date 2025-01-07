@@ -1,8 +1,18 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
+import { use } from 'react'
 import { Link } from 'react-router-dom'
 
 const Navbar = () => {
-    
+    const [user,setuser]=useState(JSON.parse(localStorage.getItem('user')) || null)
+    const [show,setshow]=useState("hidden")
+    useEffect(() => {
+      if(user.role==='admin'){
+        setshow("block")
+      }else{
+        setshow("hidden")
+      }
+
+    }, [user])
         
     
         return (
@@ -49,12 +59,21 @@ const Navbar = () => {
                     </div>
                     </div>
                     <div className='flex'>
-                      <Link to={"/addprdt"}>
+                      {/* <Link to={"/addprdt"}>
                         <div className="myaccount text-center mx-20  hover:bg-gray-300 rounded-lg px-2">
                         <i class="fa-solid fa-plus text-xl"></i>
                         <p className='text-sm text-gray-500'>Add Product</p>
                         </div>
+                      </Link> */}
+
+                      <div className={`${show}`}>
+                      <Link to={"/adminpanel"}>
+                        <div className="myaccount text-center mx-20  hover:bg-gray-300 rounded-lg px-2">
+                        <i class="fa-solid fa-plus text-xl"></i>
+                        <p className='text-sm text-gray-500'>Admin Panel</p>
+                        </div>
                       </Link>
+                      </div>
                       <Link to={"/acount"}>
                         <div className="myaccount text-center mx-3  hover:bg-gray-300">
                         <i class="fa-regular fa-user text-xl"></i>

@@ -13,6 +13,7 @@ import ChangePassWord from './Pages/ChangePassWord'
 import ForgotPassword from './Pages/ForgotPassword'
 import ResetPassword from './Pages/ResetPassword'
 import Acount from './Pages/Acount'
+import AdminPanel from './Pages/AdminPanel'
 
 
 const App = () => {
@@ -39,6 +40,7 @@ const App = () => {
         <Route path='/forgotpwd' element={<ForgotPassword />} />
         <Route path='/set-new-password/:token' element={<ResetPassword />} />
         <Route path='/acount' element={<Acount/>}/>
+        <Route path='/adminpanel' element={<ProtectedRoute><AdminPanel /></ProtectedRoute>} />
       </Routes> 
     </BrowserRouter>
   )

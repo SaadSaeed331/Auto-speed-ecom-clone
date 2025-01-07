@@ -3,11 +3,12 @@ import Navbar from '../Components/Navbar'
 import { useDispatch, useSelector } from 'react-redux'
 import { deleteItem, decrement, increment } from '../Redux toolkit/Reducer'
 import axios from 'axios'
+import { loadStripe } from '@stripe/stripe-js';
 
 const Cart = () => {
   const { array } = useSelector((state) => state.main)
-  const [user,setuser] = useState(JSON.parse(localStorage.getItem('user')) || null)
-  const [token,settoken] = useState(localStorage.getItem('token') || null)
+  const [user, setuser] = useState(JSON.parse(localStorage.getItem('user')) || null)
+  const [token, settoken] = useState(localStorage.getItem('token') || null)
   const dispatch = useDispatch()
 
   // console.log(token);
@@ -33,24 +34,56 @@ const Cart = () => {
     return a + b.quantity * b.price
   }, 0)
 
-  let qnty= array.reduce((a,b)=>{
-    return a+b.quantity
-  },0)
-console.log(qnty ,"......qunatity");
+  let qnty = array.reduce((a, b) => {
+    return a + b.quantity
+  }, 0)
+  console.log(qnty, "......qunatity");
 
 
-  const OrderArray = () => {
-    var resp = axios.post('http://localhost:4000/orderArray', {array,user,total,qnty},
-      {
-        headers:{
-          Authorization:`Bearer ${token}`
-        }
+  const OrderArray = async () => {
+
+
+    if (array.length > 0) {
+      const stripe = await loadStripe("pk_test_51QeZeM4F3IBPvvICkTEtlyWhEiMHi1BrkXvZjNULPTUn6eH9D5FaZwawMUKSaB5CLpvfLbN874xSJZEKO4BCfaDw00LsmX6Iam");
+      const body = {
+        products: array
       }
-    )
+      const headers = {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`
+      }
+      const response = await fetch("http://localhost:4000/payment", {
+        method: "POST",
+        headers: headers,
+        body: JSON.stringify(body)
+      });
+
+      const session = await response.json();
+
+      const result = stripe.redirectToCheckout({
+        sessionId: session.id
+      });
+
+      if (result.error) {
+        console.log(result.error);
+      }
+
+    }
+    else {
+      alert("Cart is empty")
+    }
+
   }
 
 
 
+  // var resp = axios.post('http://localhost:4000/orderArray', {array,user,total,qnty},
+  //   {
+  //     headers:{
+  //       Authorization:`Bearer ${token}`
+  //     }
+  //   }
+  // )
   return (
     <div>
       <Navbar />
@@ -88,8 +121,8 @@ console.log(qnty ,"......qunatity");
 
       <div className="total mx-10   border-black border-t-4 border-b-4 my-5 flex justify-between">
         <div className="flex">
-        <span className='text-3xl'>Total</span>
-        <span className='font-bold text-3xl'>${total}.00</span>
+          <span className='text-3xl'>Total</span>
+          <span className='font-bold text-3xl'>${total}.00</span>
         </div>
         <div className="">
           <button onClick={OrderArray} className='bg-red-600 mr-5 py-1 px-5 text-white rounded-lg my-1'>Order Now</button>
